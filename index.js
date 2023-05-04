@@ -5,15 +5,20 @@ const Recipe = require('./models/Recipe.model');
 // Import of the data from './data.json'
 const data = require('./data');
 
-const MONGODB_URI = 'mongodb://localhost:27017/recipe-app';
+const MONGODB_URI = 'mongodb://127.0.0.1/recipe-app';
 
 //Method 1 : Using Async Await
 
 const manageRecipes = async () => {
   try {
     // Connection to the database "recipe-app"
-    const dbConnection = await mongoose.connect("mongodb://127.0.0.1/exampleApp");
+    const dbConnection = await mongoose.connect(MONGODB_URI);
     console.log(`Connected to the database: "${dbConnection.connection.name}"`);
+
+        // Before adding any recipes to the database, let's remove all existing ones
+        await Recipe.deleteMany();
+
+        
     //Iteration 2
     // Create a recipe
     const newRecipes = await Recipe.create({
@@ -52,9 +57,6 @@ const manageRecipes = async () => {
       const removeCake = await Recipe.deleteOne({title: "Carrot Cake"});
       console.log("Recipe removed: ", removeCake);
 
-
-    // Before adding any recipes to the database, let's remove all existing ones
-    await Recipe.deleteMany();
 
     // Run your code here, after you have insured that the connection was made
   } catch (error) {
